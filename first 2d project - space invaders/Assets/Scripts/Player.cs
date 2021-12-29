@@ -11,19 +11,14 @@ public class Player : MonoBehaviour
     public Rigidbody2D projectile, SlowProjectile;
     public int projSpeed = 20;
     public int slowProjSpeed = 10;
-    public int HP = 3;
     public bool isDefaultProjectile = true;
-    [SerializeField]
-    int currentHP;
+    public bool playerDead = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentHP = HP;
-
         objectWidth = transform.GetComponent<SpriteRenderer>().bounds.size.x / 2;
         objectHeight = transform.GetComponent<SpriteRenderer>().bounds.size.y / 2;
-
         screenBounds = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, Camera.main.transform.position.z));
     }
 
@@ -65,9 +60,12 @@ public class Player : MonoBehaviour
 
     public void PlayerDamage(int damage)
     {
-        currentHP -= damage;
-        if (currentHP <= 0)
+        StaticTest.HP -= damage;
+        if (StaticTest.HP <= 0)
+        {
             Destroy(gameObject);
+            playerDead = true;
+        }            
     }
 
     public void Projectile1()

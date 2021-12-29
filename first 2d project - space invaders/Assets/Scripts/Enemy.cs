@@ -9,9 +9,12 @@ public class Enemy : MonoBehaviour
     public int projSpeed = 10;
     public Animator anim;
     public Rigidbody2D EnemyProjectile;
-    private float shtChance = .3f;
+    public float shtChance = .3f;
     public int damage = 1;
     public float fireRate = 3;
+    public EnemyManager manager;
+    public Player player;
+    public int scoreValue;
     [SerializeField]
     private int currentHP;
     
@@ -20,23 +23,28 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         currentHP = HP;
-        InvokeRepeating("ShootChance", 1, fireRate);
-        
+        InvokeRepeating("ShootChance", 1, fireRate);                      
     }
 
     // Update is called once per frame
     void Update()
     {
-  
+        System.Random rand = new System.Random();
+        scoreValue = rand.Next(10, 100);
     }
 
     public void Damage(int damage)
     {
+        if (currentHP <= 0)
+            return;
+        
         currentHP -= damage;
         if (currentHP <= 0)
         {
-            anim.SetTrigger("Exploading");
-            Destroy(gameObject, 1f);
+            anim.SetTrigger("Exploading");            
+            Destroy(gameObject, 1f);           
+            manager.EnemyDestroyed(this);            
+            StaticTest.score += scoreValue;
         }
     }
 
@@ -59,6 +67,8 @@ public class Enemy : MonoBehaviour
 
         
     }
+
+    
 
     
 }
